@@ -37,14 +37,18 @@ const useStyles = makeStyles(() => ({
 export const WorkflowRunStatus = (props: {
   status?: string;
   conclusion?: string;
+  statusDate?: string;
 }) => {
   const classes = useStyles();
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box display="flex" alignItems="center" tooltip="testing">
       <Box className={classes.statusIcon}>
         <WorkflowIcon {...props} />
       </Box>
-      <Typography variant="body2">{getStatusDescription(props)}</Typography>
+      <Typography variant="body2">
+        {getStatusDescription(props)}
+        {getFormattedStatusDate(props)}
+      </Typography>
     </Box>
   );
 };
@@ -55,6 +59,7 @@ export function WorkflowIcon({
 }: {
   status?: string;
   conclusion?: string;
+  statusDate?: string;
 }) {
   if (status === undefined) return null;
   switch (status.toLocaleLowerCase('en-US')) {
@@ -84,9 +89,11 @@ export function WorkflowIcon({
 export function getStatusDescription({
   status,
   conclusion,
+  statusDate,
 }: {
   status?: string;
   conclusion?: string;
+  statusDate?: string;
 }) {
   if (status === undefined) return '';
   switch (status.toLocaleLowerCase('en-US')) {
@@ -108,5 +115,38 @@ export function getStatusDescription({
       }
     default:
       return 'Pending';
+  }
+}
+
+export function getFormattedStatusDate({
+  status,
+  conclusion,
+  statusDate,
+}: {
+  status?: string;
+  conclusion?: string;
+  statusDate?: string;
+}) {
+  if (statusDate === undefined) return '';
+  const dateObject = new Date(statusDate);
+  const locale = new Intl.NumberFormat().resolvedOptions().locale;
+  const formatterDate = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+  });
+  const formatterTime = new Intl.DateTimeFormat(locale, {
+    timeStyle: 'medium',
+  });
+  switch (status.toLocaleLowerCase('en-US')) {
+    case 'queued':
+    case 'in_progress':
+      return ` as of ${formatterTime.format(
+        dateObject,
+      )} on ${formatterDate.format(dateObject)}`;
+    case 'completed':
+      return ` on ${formatterDate.format(dateObject)} at ${formatterTime.format(
+        dateObject,
+      )}`;
+    default:
+      return ` (${+statusDate})`;
   }
 }

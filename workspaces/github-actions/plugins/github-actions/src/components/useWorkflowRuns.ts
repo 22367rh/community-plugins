@@ -148,6 +148,7 @@ export function useWorkflowRuns({
         },
       },
       status: run.status ?? undefined,
+      statusDate: run.updated_at ?? undefined,
       conclusion: run.conclusion ?? undefined,
       url: run.url,
       githubUrl: run.html_url,

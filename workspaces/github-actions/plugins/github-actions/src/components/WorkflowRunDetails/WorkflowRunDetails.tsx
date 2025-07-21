@@ -219,6 +219,7 @@ export const WorkflowRunDetails = ({ entity }: { entity: Entity }) => {
                 <WorkflowRunStatus
                   status={details.value?.status || undefined}
                   conclusion={details.value?.conclusion || undefined}
+                  statusDate={details.value?.statusDate || undefined}
                 />
               </TableCell>
             </TableRow>

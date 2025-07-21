@@ -97,7 +97,11 @@ const generatedColumns: TableColumn<Partial<WorkflowRun>>[] = [
     },
     render: row => (
       <Box display="flex" alignItems="center">
-        <WorkflowRunStatus status={row.status} conclusion={row.conclusion} />
+        <WorkflowRunStatus
+          status={row.status}
+          conclusion={row.conclusion}
+          statusDate={row.statusDate}
+        />
       </Box>
     ),
   },
