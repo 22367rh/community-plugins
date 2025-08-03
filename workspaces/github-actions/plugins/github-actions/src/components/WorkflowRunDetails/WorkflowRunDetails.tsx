@@ -28,6 +28,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -203,13 +204,38 @@ export const WorkflowRunDetails = ({ entity }: { entity: Entity }) => {
               <TableCell>
                 <Typography noWrap>Commit ID</Typography>
               </TableCell>
-              <TableCell>{details.value?.head_commit?.id}</TableCell>
+              <TableCell>
+                {details.value?.head_commit?.id}
+
+                {details.value?.head_repository?.html_url && (
+                  <Tooltip title="View commit on GitHub">
+                    <Link
+                      to={`${details.value?.head_repository?.html_url}/commit/${details.value?.head_commit?.id}`}
+                      externalLinkIcon={1}
+                    />
+                  </Tooltip>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
                 <Typography noWrap>Workflow</Typography>
               </TableCell>
               <TableCell>{details.value?.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography noWrap>Workflow ID</Typography>
+              </TableCell>
+              <TableCell>
+                {details.value?.id}
+
+                {details.value?.html_url && (
+                  <Tooltip title="View workflow run on GitHub">
+                    <Link to={details.value?.html_url} externalLinkIcon={1} />
+                  </Tooltip>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
@@ -226,18 +252,16 @@ export const WorkflowRunDetails = ({ entity }: { entity: Entity }) => {
               <TableCell>
                 <Typography noWrap>Author</Typography>
               </TableCell>
-              <TableCell>{`${details.value?.head_commit?.author?.name} (${details.value?.head_commit?.author?.email})`}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell>
-                <Typography noWrap>Links</Typography>
-              </TableCell>
-              <TableCell>
+                {`${details.value?.head_commit?.author?.name} (${details.value?.head_commit?.author?.email})`}
+
                 {details.value?.html_url && (
-                  <Link to={details.value.html_url}>
-                    Workflow runs on GitHub{' '}
-                    <ExternalLinkIcon className={classes.externalLinkIcon} />
-                  </Link>
+                  <Tooltip title="View author on GitHub">
+                    <Link
+                      to={`https://github.com/${details.value?.actor.login}`}
+                      externalLinkIcon={1}
+                    />
+                  </Tooltip>
                 )}
               </TableCell>
             </TableRow>

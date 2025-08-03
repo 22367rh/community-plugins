@@ -42,7 +42,7 @@ export function useWorkflowRuns({
   owner,
   repo,
   branch,
-  initialPageSize = 6,
+  initialPageSize = 8,
   fetchAllBranches = true,
 }: {
   hostname?: string;
@@ -141,10 +141,11 @@ export function useWorkflowRuns({
         branchName: run.head_branch ?? undefined,
         commit: {
           hash: run.head_commit?.id,
-          url: run.head_repository?.branches_url?.replace(
-            '{/branch}',
-            run.head_branch ?? '',
-          ),
+          url: run.head_repository
+            ? `${run.head_repository?.html_url}` +
+              '/commit/' +
+              `${run.head_commit?.id}`
+            : undefined,
         },
       },
       status: run.status ?? undefined,

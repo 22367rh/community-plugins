@@ -113,7 +113,7 @@ export const WorkflowRunsCardView = ({
     <Grid container spacing={3}>
       {filteredRuns && runs?.length !== 0 ? (
         filteredRuns.map(run => (
-          <Grid key={run.id} item container xs={12} lg={6} xl={4}>
+          <Grid key={run.id} item container xs={12} md={6} lg={4} xl={3}>
             <Box className={classes.card}>
               <Box
                 display="flex"
@@ -129,10 +129,7 @@ export const WorkflowRunsCardView = ({
                   flexDirection="column"
                   height="100%"
                 >
-                  <Tooltip
-                    title={run.status ?? 'No Status'}
-                    placement="top-start"
-                  >
+                  <Link to={routeLink({ id: run.id })}>
                     <Alert
                       variant="outlined"
                       severity={
@@ -143,25 +140,30 @@ export const WorkflowRunsCardView = ({
                       style={{ alignItems: 'center' }}
                     >
                       <Typography variant="h6">
-                        <Link to={routeLink({ id: run.id })}>
-                          <Typography variant="h6">
-                            {run.workflowName}
-                          </Typography>
-                        </Link>
+                        <Typography variant="h6">{run.workflowName}</Typography>
                       </Typography>
                     </Alert>
-                  </Tooltip>
+                  </Link>
+
                   <Tooltip title={run.message ?? 'No run message'}>
                     <Box display="flex" flexDirection="column" marginY={1}>
                       <Typography variant="subtitle2" component="span">
                         Commit
                       </Typography>
+
                       <Typography
                         variant="body2"
                         component="span"
                         style={{ overflowWrap: 'break-word' }}
                       >
-                        {run.source.commit.hash!}
+                        {run.source.commit.hash.substring(0, 8)!}
+
+                        {run.source.commit.url && (
+                          <Link
+                            to={run.source.commit.url}
+                            externalLinkIcon={1}
+                          />
+                        )}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -180,16 +182,22 @@ export const WorkflowRunsCardView = ({
                       </Typography>
                     </Box>
                   )}
+
                   <Box display="flex" flexDirection="column" marginY={1}>
                     <Typography variant="subtitle2" component="span">
                       Workflow ID
                     </Typography>
+
                     <Typography
                       variant="body2"
                       component="span"
                       style={{ overflowWrap: 'break-word' }}
                     >
                       {run.id}
+
+                      {run.githubUrl && (
+                        <Link to={run.githubUrl} externalLinkIcon={1} />
+                      )}
                     </Typography>
                   </Box>
                   <Box
@@ -218,17 +226,6 @@ export const WorkflowRunsCardView = ({
                         Rerun workflow
                       </Button>
                     </Box>
-
-                    {run.githubUrl && (
-                      <Box>
-                        <LinkButton
-                          to={run.githubUrl}
-                          endIcon={<ExternalLinkIcon />}
-                        >
-                          View on GitHub
-                        </LinkButton>
-                      </Box>
-                    )}
                   </Box>
                 </Box>
               </Box>
@@ -248,10 +245,10 @@ export const WorkflowRunsCardView = ({
           rowsPerPage={pageSize}
           onPageChange={(_, newPage) => onChangePage(newPage)}
           onRowsPerPageChange={event =>
-            onChangePageSize(parseInt(event.target.value, 6))
+            onChangePageSize(parseInt(event.target.value, 8))
           }
           labelRowsPerPage="Workflows per page"
-          rowsPerPageOptions={[6, 12, 18, { label: 'All', value: -1 }]}
+          rowsPerPageOptions={[8, 12, 16, 20, 24, { label: 'All', value: -1 }]}
         />
       </div>
     </Grid>
