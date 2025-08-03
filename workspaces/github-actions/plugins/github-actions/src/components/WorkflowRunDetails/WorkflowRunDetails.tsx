@@ -250,6 +250,19 @@ export const WorkflowRunDetails = ({ entity }: { entity: Entity }) => {
             </TableRow>
             <TableRow>
               <TableCell>
+                <Typography noWrap>Age</Typography>
+              </TableCell>
+              <TableCell>
+                <Tooltip title={details.value?.updated_at ?? ''}>
+                  <Typography noWrap>{`${(details.value?.updated_at
+                    ? DateTime.fromISO(details.value?.updated_at)
+                    : DateTime.now()
+                  ).toRelative()}`}</Typography>
+                </Tooltip>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
                 <Typography noWrap>Author</Typography>
               </TableCell>
               <TableCell>
